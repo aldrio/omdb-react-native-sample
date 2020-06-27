@@ -6,6 +6,9 @@ import { MainScreen } from 'screens/Main'
 import { ResultsScreen } from 'screens/Results'
 import { FavoritesScreen } from 'screens/Favorites'
 import { Icon } from 'react-native-elements'
+import { store, persistor } from 'utils/favorites-store'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
 // Create navigation
 const Tabs = createBottomTabNavigator()
@@ -35,36 +38,45 @@ const MainStackScreen = () => {
  */
 export default () => {
   return (
-    <NavigationContainer>
-      <Tabs.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
-            // Render icon for each tab
-            let iconName
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <Tabs.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ color, size }) => {
+                // Render icon for each tab
+                let iconName
 
-            if (route.name === 'MainScreen') {
-              iconName = 'film'
-            } else if (route.name === 'FavoritesScreen') {
-              iconName = 'star'
-            }
+                if (route.name === 'MainScreen') {
+                  iconName = 'film'
+                } else if (route.name === 'FavoritesScreen') {
+                  iconName = 'star'
+                }
 
-            return (
-              <Icon name={iconName} size={size} color={color} type="feather" />
-            )
-          },
-        })}
-      >
-        <Tabs.Screen
-          name="MainScreen"
-          component={MainStackScreen}
-          options={{ title: 'Movies' }}
-        />
-        <Tabs.Screen
-          name="FavoritesScreen"
-          component={FavoritesScreen}
-          options={{ title: 'Favorites' }}
-        />
-      </Tabs.Navigator>
-    </NavigationContainer>
+                return (
+                  <Icon
+                    name={iconName}
+                    size={size}
+                    color={color}
+                    type="feather"
+                  />
+                )
+              },
+            })}
+          >
+            <Tabs.Screen
+              name="MainScreen"
+              component={MainStackScreen}
+              options={{ title: 'Movies' }}
+            />
+            <Tabs.Screen
+              name="FavoritesScreen"
+              component={FavoritesScreen}
+              options={{ title: 'Favorites' }}
+            />
+          </Tabs.Navigator>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   )
 }

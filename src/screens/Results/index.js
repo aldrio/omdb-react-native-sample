@@ -1,10 +1,11 @@
 import React from 'react'
 import { View, ActivityIndicator } from 'react-native'
-import { ListItem, Icon, Text } from 'react-native-elements'
+import { Text } from 'react-native-elements'
 import { Screen } from 'components/Screen'
 import styles from './styles'
 import { useSearch } from 'utils/omdb'
 import { useRoute } from '@react-navigation/native'
+import { MovieList } from 'components/MovieList'
 
 export const ResultsScreen = () => {
   const route = useRoute()
@@ -25,22 +26,7 @@ export const ResultsScreen = () => {
       )}
       {results && (
         <View style={styles.results}>
-          {results.map((movie) => (
-            <ListItem
-              key={movie.imdbID}
-              title={movie.Title}
-              subtitle={movie.Year}
-              leftAvatar={{ source: { uri: movie.Poster } }}
-              bottomDivider
-              rightIcon={
-                <Icon
-                  type="feather"
-                  name="star"
-                  onPress={() => alert('add to favorites')}
-                />
-              }
-            />
-          ))}
+          <MovieList movies={results} />
         </View>
       )}
     </Screen>
